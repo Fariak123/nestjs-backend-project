@@ -48,4 +48,9 @@ export class AppController {
   async createOrderItem(@Body() dto: CreateOrderItemDto): Promise<OrderItem> {
     return this.appService.postOrderItem(dto);
   }
+
+  @Delete('order/:id/item/:itemId/delete')
+  async deleteOrderItem(@Param('itemId') id: string): Promise<void> {
+    await this.appService.deleteOrderItem(id);
+  }
 }

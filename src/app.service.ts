@@ -42,4 +42,7 @@ export class AppService {
     const item: OrderItem = this.repoOrderItem.create(dto);
     return this.repoOrderItem.save(item);
   }
+  async deleteOrderItem(id: string): Promise<void> {
+    await this.repoOrderItem.delete(id);
+  }
 }
