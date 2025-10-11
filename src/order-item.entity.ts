@@ -15,7 +15,7 @@ export class OrderItem {
   @Column()
   name: string;
 
-  @Column()
+  @Column('float')
   price: number;
 
   @Column()

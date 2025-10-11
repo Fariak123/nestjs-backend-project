@@ -15,7 +15,7 @@ import { Order } from './order.entity';
       password: 'Fariak123321',
       database: 'myDB',
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
     }),
     TypeOrmModule.forFeature([Order, OrderItem]),
   ],

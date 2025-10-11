@@ -1,9 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Patch,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { Order } from './order.entity';
 import { CreateOrderDto } from './create-order.dto';
 import { CreateOrderItemDto } from './create-order-item.dto';
 import { OrderItem } from './order-item.entity';
+import { UpdateOrderItemDto } from './update-order-item.dto';
 
 @Controller()
 export class AppController {
@@ -44,6 +53,11 @@ export class AppController {
     return await this.appService.findOrderItems(id);
   }
 
+  @Get('order/:id/item/:itemId')
+  async getOrderItem(@Param('itemId') id: number): Promise<OrderItem | null> {
+    return await this.appService.getOrderItem(id);
+  }
+
   @Post('order/:id/item/create')
   async createOrderItem(@Body() dto: CreateOrderItemDto): Promise<OrderItem> {
     return this.appService.postOrderItem(dto);
@@ -52,5 +66,13 @@ export class AppController {
   @Delete('order/:id/item/:itemId/delete')
   async deleteOrderItem(@Param('itemId') id: string): Promise<void> {
     await this.appService.deleteOrderItem(id);
+  }
+
+  @Patch('order/:id/item/:itemId/edit')
+  async update(
+    @Param('itemId') id: number,
+    @Body() dto: UpdateOrderItemDto,
+  ): Promise<OrderItem> {
+    return await this.appService.updateOrderItem(id, dto);
   }
 }

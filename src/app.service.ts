@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Order } from './order.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderItem } from './order-item.entity';
 import { CreateOrderDto } from './create-order.dto';
 import { CreateOrderItemDto } from './create-order-item.dto';
+import { UpdateOrderItemDto } from './update-order-item.dto';
 
 @Injectable()
 export class AppService {
@@ -44,5 +45,17 @@ export class AppService {
   }
   async deleteOrderItem(id: string): Promise<void> {
     await this.repoOrderItem.delete(id);
+  }
+
+  async updateOrderItem(id: number, dto: UpdateOrderItemDto) {
+    const existing = await this.repoOrderItem.findOne({ where: { id } });
+    if (!existing) throw new NotFoundException(`Order ${id} not found`);
+
+    const merged = this.repoOrderItem.merge(existing, dto);
+    return this.repoOrderItem.save(merged);
+  }
+
+  getOrderItem(id: number): Promise<OrderItem | null> {
+    return this.repoOrderItem.findOne({ where: { id } });
   }
 }
